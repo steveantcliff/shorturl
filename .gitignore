@@ -1,0 +1,16 @@
+# Build artifacts
+.build/
+staging/
+*.dmg
+
+# macOS
+.DS_Store
+*.app
+
+# SwiftPM
+.swiftpm/
+Package.resolved
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
