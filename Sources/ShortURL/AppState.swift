@@ -9,7 +9,7 @@ final class AppState: ObservableObject {
     @Published var shortenedURL: String = ""
     @Published var copyButtonLabel: String = "Copy"
     @Published var serverRunning: Bool = false
-    @Published var serverPort: UInt16 = 8080
+    @Published var serverPort: UInt16 = 443
     @Published var statusMessage: String = ""
     @Published var statusIsError: Bool = false
 
@@ -24,13 +24,18 @@ final class AppState: ObservableObject {
                 try await server.start(port: serverPort, store: store)
                 await MainActor.run {
                     serverRunning = true
-                    statusMessage = "Server running on port \(serverPort)"
+                    let portNote = serverPort == 443 ? "" : " (port \(serverPort))"
+                    statusMessage = "Server running\(portNote)"
                     statusIsError = false
                 }
             } catch {
                 await MainActor.run {
                     serverRunning = false
-                    statusMessage = "Server failed: \(error.localizedDescription)"
+                    if serverPort == 443 {
+                        statusMessage = "Port 443 needs privileges. Run with sudo or change port."
+                    } else {
+                        statusMessage = "Server failed: \(error.localizedDescription)"
+                    }
                     statusIsError = true
                 }
             }
@@ -66,7 +71,7 @@ final class AppState: ObservableObject {
 
         Task {
             store.save(code: code, originalURL: normalizedURL)
-            let shortURL = "https://short.url:\(serverPort)/\(code)"
+            let shortURL = "https://short.url/\(code)"
             await MainActor.run {
                 shortenedURL = shortURL
                 copyButtonLabel = "Copy"

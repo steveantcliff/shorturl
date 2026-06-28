@@ -135,10 +135,12 @@ struct ContentView: View {
 
             Spacer()
 
-            Text("port \(appState.serverPort)")
-                .font(.system(size: 9))
-                .foregroundColor(.secondary.opacity(0.6))
-                .monospacedDigit()
+            if appState.serverPort != 443 {
+                Text("port \(appState.serverPort)")
+                    .font(.system(size: 9))
+                    .foregroundColor(.secondary.opacity(0.6))
+                    .monospacedDigit()
+            }
         }
     }
 }
