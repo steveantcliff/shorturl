@@ -65,8 +65,8 @@ final class AppState: ObservableObject {
         let normalizedURL = url.absoluteString
 
         Task {
-            await store.save(code: code, originalURL: normalizedURL)
-            let shortURL = "http://short.url:\(serverPort)/\(code)"
+            store.save(code: code, originalURL: normalizedURL)
+            let shortURL = "https://short.url:\(serverPort)/\(code)"
             await MainActor.run {
                 shortenedURL = shortURL
                 copyButtonLabel = "Copy"
