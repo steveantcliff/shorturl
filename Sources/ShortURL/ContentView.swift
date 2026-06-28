@@ -135,7 +135,7 @@ struct ContentView: View {
 
             Spacer()
 
-            if appState.serverPort != 443 {
+            if appState.serverPort != 80 {
                 Text("port \(appState.serverPort)")
                     .font(.system(size: 9))
                     .foregroundColor(.secondary.opacity(0.6))
