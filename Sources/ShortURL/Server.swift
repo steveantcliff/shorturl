@@ -149,15 +149,13 @@ final class RedirectServer {
             return
         }
 
-        // Lookup in store — keep socket alive until async response is sent
-        Task {
-            if let mapping = await store.lookup(code: code) {
-                sendRedirect(client, to: mapping.originalURL)
-            } else {
-                sendResponse(client, status: 404, body: notFoundHTML(code: code))
-            }
-            close(client)
+        // Lookup in store (NSLock-guarded, safe from any thread)
+        if let mapping = store.lookup(code: code) {
+            sendRedirect(client, to: mapping.originalURL)
+        } else {
+            sendResponse(client, status: 404, body: notFoundHTML(code: code))
         }
+        close(client)
     }
 
     // MARK: - Request parsing

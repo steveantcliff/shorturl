@@ -26,6 +26,8 @@ final class URLStore: @unchecked Sendable {
            let decoded = try? JSONDecoder().decode([String: URLMapping].self, from: data) {
             mappings = decoded
             print("[URLStore] Loaded \(mappings.count) mappings")
+        } else {
+            print("[URLStore] No existing mappings")
         }
     }
 
